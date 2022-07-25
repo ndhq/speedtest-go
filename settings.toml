@@ -6,9 +6,6 @@ listen_port=8989
 # url_base="/librespeed"
 # proxy protocol port, use 0 to disable
 proxyprotocol_port=0
-# Server location
-server_lat=1
-server_lng=1
 geoip2_file="GeoLite2-City.mmdb"
 
 # assets directory path, defaults to `assets` in the same directory

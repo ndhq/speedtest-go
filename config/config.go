@@ -6,13 +6,11 @@ import (
 )
 
 type Config struct {
-	BindAddress       string  `mapstructure:"bind_address"`
-	Port              string  `mapstructure:"listen_port"`
-	BaseURL           string  `mapstructure:"url_base"`
-	ProxyProtocolPort string  `mapstructure:"proxyprotocol_port"`
-	ServerLat         float64 `mapstructure:"server_lat"`
-	ServerLng         float64 `mapstructure:"server_lng"`
-	GeoIPFile         string  `mapstructure:"geoip2_file"`
+	BindAddress       string `mapstructure:"bind_address"`
+	Port              string `mapstructure:"listen_port"`
+	BaseURL           string `mapstructure:"url_base"`
+	ProxyProtocolPort string `mapstructure:"proxyprotocol_port"`
+	GeoIPFile         string `mapstructure:"geoip2_file"`
 
 	StatsPassword string `mapstructure:"statistics_password"`
 	RedactIP      bool   `mapstructure:"redact_ip_addresses"`
