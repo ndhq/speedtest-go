@@ -135,3 +135,5 @@ speedtest.db
 .idea/
 speedtest-backend
 dist/
+
+*.mmdb

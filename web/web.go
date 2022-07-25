@@ -3,6 +3,7 @@ package web
 import (
 	"embed"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/fs"
 	"io/ioutil"
@@ -191,21 +192,21 @@ func getIP(w http.ResponseWriter, r *http.Request) {
 	isSpecialIP := true
 	switch {
 	case clientIP == "::1":
-		ret.ProcessedString = clientIP + " - localhost IPv6 access"
+		ret.ProcessedString = clientIP + " - 本机 IPv6 访问"
 	case strings.HasPrefix(clientIP, "fe80:"):
-		ret.ProcessedString = clientIP + " - link-local IPv6 access"
+		ret.ProcessedString = clientIP + " - 链路本地 IPv6 访问"
 	case strings.HasPrefix(clientIP, "127."):
-		ret.ProcessedString = clientIP + " - localhost IPv4 access"
+		ret.ProcessedString = clientIP + " - 本机 IPv4 访问"
 	case strings.HasPrefix(clientIP, "10."):
-		ret.ProcessedString = clientIP + " - private IPv4 access"
+		ret.ProcessedString = clientIP + " - 内网 IPv4 访问"
 	case regexp.MustCompile(`^172\.(1[6-9]|2\d|3[01])\.`).MatchString(clientIP):
-		ret.ProcessedString = clientIP + " - private IPv4 access"
+		ret.ProcessedString = clientIP + " - 内网 IPv4 访问"
 	case strings.HasPrefix(clientIP, "192.168"):
-		ret.ProcessedString = clientIP + " - private IPv4 access"
+		ret.ProcessedString = clientIP + " - 内网 IPv4 访问"
 	case strings.HasPrefix(clientIP, "169.254"):
-		ret.ProcessedString = clientIP + " - link-local IPv4 access"
+		ret.ProcessedString = clientIP + " - 链路本地 IPv4 访问"
 	case regexp.MustCompile(`^100\.([6-9][0-9]|1[0-2][0-7])\.`).MatchString(clientIP):
-		ret.ProcessedString = clientIP + " - CGNAT IPv4 access"
+		ret.ProcessedString = clientIP + " - CGNAT IPv4 访问"
 	default:
 		isSpecialIP = false
 	}
@@ -219,30 +220,29 @@ func getIP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	getISPInfo := r.FormValue("isp") == "true"
-	distanceUnit := r.FormValue("distance")
-
-	ret.ProcessedString = clientIP
 
 	if getISPInfo {
-		ispInfo := getIPInfo(clientIP)
-		ret.RawISPInfo = ispInfo
+		cityInfo, ispInfo := getIPInfo(clientIP)
+		if cityInfo != nil {
+			ret.RawISPInfo = results.IPInfoResponse{
+				IP:       clientIP,
+				City:     cityInfo.City.Names["zh-CN"],
+				Country:  cityInfo.Country.Names["zh-CN"],
+				Postal:   cityInfo.Postal.Code,
+				Timezone: cityInfo.Location.TimeZone,
+				Readme:   "Data from MaxMind GeoIP2",
+			}
+		}
+		if ispInfo != nil {
+			ret.RawISPInfo.Organization = ispInfo.Organization
+		}
 
-		removeRegexp := regexp.MustCompile(`AS\d+\s`)
-		isp := removeRegexp.ReplaceAllString(ispInfo.Organization, "")
-
+		isp := ispInfo.ISP
 		if isp == "" {
-			isp = "Unknown ISP"
+			isp = "未知 ISP"
 		}
 
-		if ispInfo.Country != "" {
-			isp += ", " + ispInfo.Country
-		}
-
-		if ispInfo.Location != "" {
-			isp += " (" + calculateDistance(ispInfo.Location, distanceUnit) + ")"
-		}
-
-		ret.ProcessedString += " - " + isp
+		ret.ProcessedString = fmt.Sprintf("%s (%s) - %s, %s", clientIP, isp, ret.RawISPInfo.City, ret.RawISPInfo.Country)
 	}
 
 	render.JSON(w, r, ret)

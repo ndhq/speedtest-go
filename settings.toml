@@ -9,8 +9,7 @@ proxyprotocol_port=0
 # Server location
 server_lat=1
 server_lng=1
-# ipinfo.io API key, if applicable
-ipinfo_api_key=""
+geoip2_file="GeoLite2-City.mmdb"
 
 # assets directory path, defaults to `assets` in the same directory
 assets_path=""
@@ -22,7 +21,7 @@ redact_ip_addresses=false
 
 # database type for statistics data, currently supports: none, memory, bolt, mysql, postgresql
 # if none is specified, no telemetry/stats will be recorded, and no result PNG will be generated
-database_type="bolt"
+database_type="none"
 database_hostname=""
 database_name=""
 database_username=""

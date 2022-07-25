@@ -20,7 +20,7 @@ var (
 func main() {
 	flag.Parse()
 	conf := config.Load(*optConfig)
-	web.SetServerLocation(&conf)
+	web.InitGeoIP2Database(&conf)
 	results.Initialize(&conf)
 	database.SetDBInfo(&conf)
 	log.Fatal(web.ListenAndServe(&conf))
