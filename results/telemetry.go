@@ -74,13 +74,12 @@ type Result struct {
 }
 
 type IPInfoResponse struct {
-	IP           string `json:"ip"`
-	City         string `json:"city"`
-	Country      string `json:"country"`
-	Organization string `json:"org"`
-	Postal       string `json:"postal"`
-	Timezone     string `json:"timezone"`
-	Readme       string `json:"readme"`
+	IP       string `json:"ip"`
+	City     string `json:"city"`
+	Country  string `json:"country"`
+	Postal   string `json:"postal"`
+	Timezone string `json:"timezone"`
+	Readme   string `json:"readme"`
 }
 
 func Initialize(c *config.Config) {

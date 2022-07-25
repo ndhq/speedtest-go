@@ -21,20 +21,16 @@ func getRandomData(length int) []byte {
 	return data
 }
 
-func getIPInfo(addr string) (*geoip2.City, *geoip2.ISP) {
+func getIPInfo(addr string) *geoip2.City {
 	if geoip2db == nil {
-		return nil, nil
+		return nil
 	}
 	ip := net.ParseIP(addr)
 	cityInfo, err := geoip2db.City(ip)
 	if err != nil {
 		cityInfo = nil
 	}
-	ispInfo, err := geoip2db.ISP(ip)
-	if err != nil {
-		ispInfo = nil
-	}
-	return cityInfo, ispInfo
+	return cityInfo
 }
 
 func InitGeoIP2Database(conf *config.Config) {

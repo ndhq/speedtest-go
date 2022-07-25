@@ -222,27 +222,19 @@ func getIP(w http.ResponseWriter, r *http.Request) {
 	getISPInfo := r.FormValue("isp") == "true"
 
 	if getISPInfo {
-		cityInfo, ispInfo := getIPInfo(clientIP)
+		cityInfo := getIPInfo(clientIP)
 		if cityInfo != nil {
 			ret.RawISPInfo = results.IPInfoResponse{
 				IP:       clientIP,
-				City:     cityInfo.City.Names["zh-CN"],
-				Country:  cityInfo.Country.Names["zh-CN"],
+				City:     cityInfo.City.Names["en"],
+				Country:  cityInfo.Country.Names["en"],
 				Postal:   cityInfo.Postal.Code,
 				Timezone: cityInfo.Location.TimeZone,
 				Readme:   "Data from MaxMind GeoIP2",
 			}
 		}
-		if ispInfo != nil {
-			ret.RawISPInfo.Organization = ispInfo.Organization
-		}
 
-		isp := ispInfo.ISP
-		if isp == "" {
-			isp = "未知 ISP"
-		}
-
-		ret.ProcessedString = fmt.Sprintf("%s (%s) - %s, %s", clientIP, isp, ret.RawISPInfo.City, ret.RawISPInfo.Country)
+		ret.ProcessedString = fmt.Sprintf("%s - %s, %s", clientIP, ret.RawISPInfo.City, ret.RawISPInfo.Country)
 	}
 
 	render.JSON(w, r, ret)
