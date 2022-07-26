@@ -15,7 +15,7 @@ FROM alpine AS RUNNER
 RUN apk add ca-certificates
 WORKDIR /app
 COPY --from=build_base /build/nyaspeed .
-COPY --from=build_base /build/assets ./assets
+COPY --from=build_base /build/web/assets ./assets
 COPY --from=build_base /build/settings.toml .
 
 EXPOSE 8989
