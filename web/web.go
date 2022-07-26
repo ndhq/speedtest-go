@@ -181,7 +181,10 @@ func garbage(w http.ResponseWriter, r *http.Request) {
 func getIP(w http.ResponseWriter, r *http.Request) {
 	var ret results.Result
 
-	clientIP := r.RemoteAddr
+	clientIP := r.Header.Get("CF-Connecting-IP")
+	if clientIP == "" {
+		clientIP = r.RemoteAddr
+	}
 	clientIP = strings.ReplaceAll(clientIP, "::ffff:", "")
 
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
