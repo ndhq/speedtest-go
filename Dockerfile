@@ -1,20 +1,23 @@
 FROM golang:alpine AS build_base
 #ENV GOARCH arm64
 #ENV GOARCH amd64
-RUN apk add --no-cache git gcc ca-certificates libc-dev \
-&& mkdir -p /go/src/github.com/librespeed/ \
-&& cd /go/src/github.com/librespeed/ \
-&& git clone https://github.com/librespeed/speedtest-go.git
-WORKDIR /go/src/github.com/librespeed/speedtest-go
-RUN go get ./ && go build -ldflags "-w -s" -trimpath -o speedtest main.go
 
-FROM alpine:3.15
+WORKDIR /build
+
+RUN apk add --no-cache git gcc ca-certificates libc-dev
+
+COPY . ./
+
+RUN go get ./ && go build -ldflags "-w -s" -trimpath -o nyaspeed main.go
+
+FROM alpine AS RUNNER
+
 RUN apk add ca-certificates
 WORKDIR /app
-COPY --from=build_base /go/src/github.com/librespeed/speedtest-go/speedtest .
-COPY --from=build_base /go/src/github.com/librespeed/speedtest-go/web/assets ./assets
-COPY --from=build_base /go/src/github.com/librespeed/speedtest-go/settings.toml .
+COPY --from=build_base /build/nyaspeed .
+COPY --from=build_base /build/assets ./assets
+COPY --from=build_base /build/settings.toml .
 
 EXPOSE 8989
 
-CMD ["./speedtest"]
+CMD ["./nyaspeed"]
