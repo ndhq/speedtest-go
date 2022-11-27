@@ -229,8 +229,8 @@ func getIP(w http.ResponseWriter, r *http.Request) {
 		if cityInfo != nil {
 			ret.RawISPInfo = results.IPInfoResponse{
 				IP:       clientIP,
-				City:     cityInfo.City.Names["en"],
-				Country:  cityInfo.Country.Names["en"],
+				City:     cityInfo.City.Names["zh-CN"],
+				Country:  cityInfo.Country.Names["zh-CN"],
 				Postal:   cityInfo.Postal.Code,
 				Timezone: cityInfo.Location.TimeZone,
 				Readme:   "Data from MaxMind GeoIP2",

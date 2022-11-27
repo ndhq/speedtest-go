@@ -277,7 +277,7 @@
 		if (!forced && s.getState() !== 3) return;
 		if (uiData == null) return;
 		const status = uiData.testState;
-		I("ip").textContent = uiData.clientIp;
+		// I("ip").textContent = uiData.clientIp;
 		I("dlText").textContent = (status === 1 && uiData.dlStatus === 0) ? "..." : format(uiData.dlStatus);
 		drawMeter(I("dlMeter"), mbpsToAmount(Number(uiData.dlStatus * (status === 1 ? oscillate() : 1))), meterBk, dlColor, Number(uiData.dlProgress), progColor);
 		I("ulText").textContent = (status === 3 && uiData.ulStatus === 0) ? "..." : format(uiData.ulStatus);
@@ -302,6 +302,13 @@
 
 	frame(); //start frame loop
 	//function to (re)initialize UI
+
+	function initIP() {
+		fetch("backend/getIP.php?isp=true").then(res => res.json()).then(res => {
+			I("ip").textContent = res.processedString;
+		})
+	}
+
 	function initUI() {
 		drawMeter(I("dlMeter"), 0, meterBk, dlColor, 0);
 		drawMeter(I("ulMeter"), 0, meterBk, ulColor, 0);
@@ -310,6 +317,8 @@
 		I("pingText").textContent = "";
 		I("jitText").textContent = "";
 		I("ip").textContent = "";
+
+		initIP();
 	}
 
 	window.onload = initUI;
