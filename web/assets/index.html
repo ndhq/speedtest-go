@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no"/>
     <meta charset="UTF-8"/>
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="nyaspeed.png">
     <style type="text/css">
         html, body {
             border: none;
@@ -15,11 +15,17 @@
         }
 
         body {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
+			display: grid;
             text-align: center;
             font-family: "Roboto", sans-serif;
+        }
+
+        #testWrapper {
+            align-self: center;
+        }
+
+        .footer {
+            align-self: end;
         }
 
         h1, a {
@@ -145,17 +151,26 @@
 			text-decoration: none;
 		}
 
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 6rem;
+        }
+
         @media all and (max-width: 40em) {
             body {
                 font-size: 0.8em;
+            }
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 4.5rem;
             }
         }
     </style>
     <title>NyaSpeed</title>
 </head>
 <body>
-<h1>NyaSpeed</h1>
 <div id="testWrapper">
+    <h1>NyaSpeed</h1>
     <div id="test">
         <div class="testGroup">
             <div class="testArea2">
@@ -191,7 +206,7 @@
 </div>
 <p class="footer">
 	<span>基于 <a href="https://github.com/librespeed/speedtest-go" target="_blank">LibreSpeed-Go</a> 打造</span> |
-	<a href="https://github.com/nyaone/speedtest-go" target="_blank">源码</a>
+	<span><a href="https://github.com/ndhq/speedtest-go" target="_blank">源码</a></span>
 </p>
 <script type="text/javascript" src="speedtest.js"></script>
 <script type="text/javascript">
